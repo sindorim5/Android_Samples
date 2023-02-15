@@ -8,12 +8,13 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var webView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val webView = findViewById<WebView>(R.id.webView)
+        webView = findViewById<WebView>(R.id.webView)
 
         webView.apply {
             webViewClient = WebViewClient()
@@ -28,6 +29,14 @@ class MainActivity : AppCompatActivity() {
             Log.d("싸피", "onCreate1: $userAgentString")
             userAgentString = getReplaceUserAgent(userAgentString)
             Log.d("싸피", "onCreate2: $userAgentString")
+        }
+    }
+
+    override fun onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack()
+        } else {
+            super.onBackPressed()
         }
     }
 
