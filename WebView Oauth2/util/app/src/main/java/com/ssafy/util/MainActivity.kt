@@ -6,6 +6,7 @@ import android.util.Log
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
     private lateinit var webView: WebView
@@ -19,16 +20,14 @@ class MainActivity : AppCompatActivity() {
         webView.apply {
             webViewClient = WebViewClient()
             webChromeClient = WebChromeClient()
-            loadUrl("https://i8d210.p.ssafy.io")
+            loadUrl(getString(R.string.domain_url))
         }
 
         webView.settings.apply {
             javaScriptEnabled = true
             domStorageEnabled = true
             setSupportMultipleWindows(true)
-            Log.d("싸피", "onCreate1: $userAgentString")
             userAgentString = getReplaceUserAgent(userAgentString)
-            Log.d("싸피", "onCreate2: $userAgentString")
         }
     }
 

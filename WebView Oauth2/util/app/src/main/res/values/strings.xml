@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">util</string>
+    <string name="domain_url">https://i8d210.p.ssafy.io</string>
 </resources>
