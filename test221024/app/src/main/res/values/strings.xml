@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">클린 테스트 스토어</string>
+
+    <string name="main_store_name">싸피벅스</string>
+    <string name="main_store_tel">010-1234-5678</string>
+    <string name="main_store_lat">36.108</string>
+    <string name="main_store_lng">128.418</string>
+
+    <string name="stuff_item">물품: 사과 -> 수량: 10</string>
+
+    <string name="stuff_add">등록</string>
+
+    <string name="edit_name">물품 이름</string>
+    <string name="edit_quantity">물품 수량</string>
+    <string name="edit_save">저장</string>
+    <string name="edit_delete">삭제</string>
+    <string name="edit_cancel">취소</string>
+
+</resources>
