@@ -4,6 +4,9 @@ plugins {
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
 }
 
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
     namespace 'com.example.googlemapwithweather'
     compileSdk 33
@@ -16,6 +19,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "WEATHER_API_KEY", properties['WEATHER_API_KEY']
     }
 
     buildTypes {
@@ -50,5 +54,14 @@ dependencies {
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
     implementation 'com.google.android.gms:play-services-location:21.0.1'
     implementation 'com.google.maps.android:android-maps-utils:3.4.0'
+
+    // https://github.com/square/retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    // https://github.com/square/retrofit/tree/master/retrofit-converters/gson
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //okhttp
+    implementation 'com.squareup.okhttp3:okhttp:4.9.2'
 
 }
