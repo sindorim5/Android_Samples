@@ -1,33 +1,41 @@
 package com.example.googlemapwithweather
 
 import android.annotation.SuppressLint
+import android.content.res.Resources
 import android.location.Location
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.googlemapwithweather.databinding.ActivityMainBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import com.google.maps.android.clustering.ClusterManager
+import com.google.maps.android.collections.MarkerManager
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.net.MalformedURLException
+import java.net.URL
+import kotlin.math.round
+
 
 private const val TAG = "MainActivity_sdr"
 
 class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMainBinding
-    private var iceLandList: ArrayList<LatLng> = arrayListOf()
+    private var iceLandList: ArrayList<IcelandItem> = arrayListOf()
 
     private var googleMap: GoogleMap? = null
     private var currentMarker: Marker? = null
     private lateinit var currentPosition: LatLng
+    private lateinit var clusterManager: ClusterManager<IcelandItem>
+    private lateinit var normalMarkerCollection: MarkerManager.Collection
+
+    private lateinit var mCloudTileOverlay: TileOverlay
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,28 +49,120 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         mapFragment?.getMapAsync(this)
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        this.googleMap = googleMap
+    @SuppressLint("PotentialBehaviorOverride")
+    override fun onMapReady(gMap: GoogleMap) {
+        googleMap = gMap
 
+        // custom style of map
+//        try {
+//            // Customise the styling of the base map using a JSON object defined
+//            // in a raw resource file.
+//            val success = googleMap!!.setMapStyle(
+//                MapStyleOptions.loadRawResourceStyle(
+//                    this, R.raw.style_json
+//                )
+//            )
+//            if (!success) {
+//                Log.e(TAG, "Style parsing failed.")
+//            }
+//        } catch (e: Resources.NotFoundException) {
+//            Log.e(TAG, "Can't find style. Error: ", e)
+//        }
+
+        // setDefaultLocation
+        setDefaultLocation()
+
+        // cluster, marker click
+        clusterManager = ClusterManager<IcelandItem>(this, googleMap)
+        gMap.setOnMarkerClickListener(clusterManager.markerManager)
+        normalMarkerCollection = clusterManager.markerManager.newCollection()
         for (i in 0 until iceLandList.size) {
-            googleMap.addMarker(
-                MarkerOptions()
-                    .position(iceLandList[i])
-            )
+            clusterManager.addItem(iceLandList[i])
+            normalMarkerCollection.apply {
+                addMarker(
+                    MarkerOptions()
+                        .position(iceLandList[i].position)
+                        .title(iceLandList[i].title)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                )
+            }
         }
 
-        setDefaultLocation()
-        
+//        normalMarkerCollection.setOnMarkerClickListener {
+//            GoogleMap.OnMarkerClickListener { marker ->
+//                Log.d(TAG, "onMapReady: ${marker.title}")
+//                Toast.makeText(
+//                    this,
+//                    "lat:${marker.position.latitude}\nlng:${marker.position.longitude}",
+//                    Toast.LENGTH_SHORT
+//                ).show()
+//                false
+//            }
+//            false
+//        }
+        gMap.setOnMapLongClickListener {
+            currentPosition = it
+
+            val location = Location("").apply {
+                this.latitude = it.latitude
+                this.longitude = it.longitude
+            }
+
+            setCurrentLocation(location, "current", "curr")
+            getWeatherData(it.latitude, it.longitude)
+        }
+
+//        clusterManager.setOnClusterClickListener {
+//            Log.d(TAG, "onMapReady: click")
+//            Toast.makeText(
+//                this,
+//                "lat:${it.position.latitude}\nlng:${it.position.longitude}",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//            false
+//        }
+
+        val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
+            @Synchronized
+            override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+
+                val s: String = String.format(
+                    "https://tile.openweathermap.org/map/clouds_new/%d/%d/%d.png?appid=${BuildConfig.WEATHER_API_KEY}",
+                    zoom, x, y
+                )
+//                val sourceUrl =
+//                    "https://tile.openweathermap.org/map/clouds_new/${zoom}/${x}/${y}.png?appid=${BuildConfig.WEATHER_API_KEY}"
+
+
+                var tileUrl: URL? = null
+                tileUrl = try {
+                    URL(s)
+                } catch (e: MalformedURLException) {
+                    throw AssertionError(e)
+                }
+                Log.d(TAG, "getTileUrl: $tileUrl")
+                return tileUrl
+            }
+
+//            private fun checkTileExists(x: Int, y: Int, zoom: Int): Boolean {
+//                val minZoom = 6
+//                val maxZoom = 18
+//                Log.d(TAG, "zoom: $zoom")
+//                Log.d(TAG, "checkTileExists: ${zoom in minZoom..maxZoom}")
+//                return zoom in minZoom..maxZoom
+//            }
+        }
+        mCloudTileOverlay = gMap.addTileOverlay(TileOverlayOptions().tileProvider(tileProvider))!!
     }
 
-
     private fun makeIcelandList() {
-        val reykjavik = LatLng(64.133, -21.933)
-        val gullfoss = LatLng(64.327751, -20.121331)
-        val akureyri = LatLng(65.68389, -18.11056)
-        val jokulsarlon = LatLng(64.068833058, -16.206999172)
-        val vik = LatLng(63.418632, -19.006048)
-        val diamondBeach = LatLng(64.043065, -16.175841)
+        val reykjavik = IcelandItem(64.133, -21.933, "reykjavik", "reykjavik_snipp")
+        val gullfoss = IcelandItem(64.327751, -20.121331, "gullfoss", "gullfoss_snipp")
+        val akureyri = IcelandItem(65.68389, -18.11056, "akureyri", "akureyri_snipp")
+        val jokulsarlon =
+            IcelandItem(64.068833058, -16.206999172, "jokulsarlon", "jokulsarlon_snipp")
+        val vik = IcelandItem(63.418632, -19.006048, "vik", "vik_snipp")
+        val diamondBeach = IcelandItem(64.043065, -16.175841, "Diamond Beach", "D-Beach_snipp")
 
         iceLandList.add(reykjavik)
         iceLandList.add(gullfoss)
@@ -90,12 +190,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val currentLatLng = LatLng(location.latitude, location.longitude)
 
-        val markerOptions = MarkerOptions()
-        markerOptions.position(currentLatLng)
-        markerOptions.title(markerTitle)
-        markerOptions.snippet(markerSnippet)
-        markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+        val markerOptions = MarkerOptions().apply {
+            position(currentLatLng)
+            title(markerTitle)
+            snippet(markerSnippet)
+            icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+        }
 
+        currentPosition = currentLatLng
         currentMarker = this.googleMap?.addMarker(markerOptions)
         val cameraUpdate = CameraUpdateFactory.newLatLngZoom(currentLatLng, 6f)
         this.googleMap?.animateCamera(cameraUpdate)
@@ -113,7 +215,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             ) {
                 if (response.code() == 200) {
                     val res = response.body() as WeatherResponse
-                    Toast.makeText(this@MainActivity, "${res.main.temp}", Toast.LENGTH_SHORT).show()
+
+                    Log.d(TAG, "onResponse: $res")
+
+                    Toast.makeText(
+                        this@MainActivity,
+                        "name:${res.name}\nTemp:${round((res.main.temp - 273.15) * 10 / 10)}\nCloud:${res.clouds.all}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 } else {
                     Log.d(TAG, "getWeatherData - onResponse : Error code ${response.code()}")
                 }
@@ -124,5 +233,4 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         })
     }
-
 }
