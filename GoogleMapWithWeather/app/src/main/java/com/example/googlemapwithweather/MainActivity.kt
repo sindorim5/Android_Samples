@@ -34,7 +34,6 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var currentPosition: LatLng
     private lateinit var clusterManager: ClusterManager<IcelandItem>
     private lateinit var normalMarkerCollection: MarkerManager.Collection
-
     private lateinit var mCloudTileOverlay: TileOverlay
 
 
@@ -53,13 +52,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(gMap: GoogleMap) {
         googleMap = gMap
 
-//         custom style of map
+        // custom style map
         try {
             // Customise the styling of the base map using a JSON object defined
             // in a raw resource file.
             val success = googleMap!!.setMapStyle(
                 MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.style_json
+                    this, R.raw.dark_style_json
                 )
             )
             if (!success) {
@@ -100,6 +99,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 //            }
 //            false
 //        }
+
+        clusterManager.setOnClusterItemClickListener {
+            Log.d(TAG, "onMapReady: click")
+            Toast.makeText(
+                this,
+                "lat:${it.position.latitude}\nlng:${it.position.longitude}",
+                Toast.LENGTH_SHORT
+            ).show()
+            false
+        }
+
         gMap.setOnMapLongClickListener {
             currentPosition = it
 
@@ -112,30 +122,13 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             getWeatherData(it.latitude, it.longitude)
         }
 
-//        clusterManager.setOnClusterClickListener {
-//            Log.d(TAG, "onMapReady: click")
-//            Toast.makeText(
-//                this,
-//                "lat:${it.position.latitude}\nlng:${it.position.longitude}",
-//                Toast.LENGTH_SHORT
-//            ).show()
-//            false
-//        }
-
         val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
-            @Synchronized
             override fun getTileUrl(x: Int, y: Int, z: Int): URL? {
 
-                val s: String = String.format(
-                    "https://cartodb-basemaps-b.global.ssl.fastly.net/light_all/%d/%d/%d.png",
-                    z, x, y
-                )
-//                val s =
-//                    "https://tile.openweathermap.org/map/clouds_new/${z}/${x}/${y}.png?appid=${BuildConfig.WEATHER_API_KEY}"
+                val s =
+                    "https://tile.openweathermap.org/map/clouds_new/${z}/${x}/${y}.png?appid=${BuildConfig.WEATHER_API_KEY}"
 
-
-                var tileUrl: URL? = null
-                tileUrl = try {
+                val tileUrl: URL? = try {
                     URL(s)
                 } catch (e: MalformedURLException) {
                     throw AssertionError(e)
@@ -152,7 +145,11 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 //                return zoom in minZoom..maxZoom
 //            }
         }
-        mCloudTileOverlay = gMap.addTileOverlay(TileOverlayOptions().tileProvider(tileProvider))!!
+//        mCloudTileOverlay = gMap.addTileOverlay(
+//            TileOverlayOptions()
+//                .tileProvider(tileProvider)
+//                .transparency(0.9f)
+//        )!!
     }
 
     private fun makeIcelandList() {
