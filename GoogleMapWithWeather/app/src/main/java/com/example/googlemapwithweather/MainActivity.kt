@@ -53,21 +53,21 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(gMap: GoogleMap) {
         googleMap = gMap
 
-        // custom style of map
-//        try {
-//            // Customise the styling of the base map using a JSON object defined
-//            // in a raw resource file.
-//            val success = googleMap!!.setMapStyle(
-//                MapStyleOptions.loadRawResourceStyle(
-//                    this, R.raw.style_json
-//                )
-//            )
-//            if (!success) {
-//                Log.e(TAG, "Style parsing failed.")
-//            }
-//        } catch (e: Resources.NotFoundException) {
-//            Log.e(TAG, "Can't find style. Error: ", e)
-//        }
+//         custom style of map
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            val success = googleMap!!.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this, R.raw.style_json
+                )
+            )
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", e)
+        }
 
         // setDefaultLocation
         setDefaultLocation()
@@ -124,14 +124,14 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
         val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
             @Synchronized
-            override fun getTileUrl(x: Int, y: Int, zoom: Int): URL? {
+            override fun getTileUrl(x: Int, y: Int, z: Int): URL? {
 
                 val s: String = String.format(
-                    "https://tile.openweathermap.org/map/clouds_new/%d/%d/%d.png?appid=${BuildConfig.WEATHER_API_KEY}",
-                    zoom, x, y
+                    "https://cartodb-basemaps-b.global.ssl.fastly.net/light_all/%d/%d/%d.png",
+                    z, x, y
                 )
-//                val sourceUrl =
-//                    "https://tile.openweathermap.org/map/clouds_new/${zoom}/${x}/${y}.png?appid=${BuildConfig.WEATHER_API_KEY}"
+//                val s =
+//                    "https://tile.openweathermap.org/map/clouds_new/${z}/${x}/${y}.png?appid=${BuildConfig.WEATHER_API_KEY}"
 
 
                 var tileUrl: URL? = null
