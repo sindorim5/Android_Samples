@@ -2,10 +2,12 @@ package com.example.googlemapwithweather
 
 import android.annotation.SuppressLint
 import android.content.res.Resources
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.ColorRes
 import androidx.appcompat.app.AppCompatActivity
 import com.example.googlemapwithweather.databinding.ActivityMainBinding
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -53,20 +55,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         googleMap = gMap
 
         // custom style map
-        try {
-            // Customise the styling of the base map using a JSON object defined
-            // in a raw resource file.
-            val success = googleMap!!.setMapStyle(
-                MapStyleOptions.loadRawResourceStyle(
-                    this, R.raw.dark_style_json
-                )
-            )
-            if (!success) {
-                Log.e(TAG, "Style parsing failed.")
-            }
-        } catch (e: Resources.NotFoundException) {
-            Log.e(TAG, "Can't find style. Error: ", e)
-        }
+//        setCustomMapStyle()
 
         // setDefaultLocation
         setDefaultLocation()
@@ -110,17 +99,17 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             false
         }
 
-        gMap.setOnMapLongClickListener {
-            currentPosition = it
-
-            val location = Location("").apply {
-                this.latitude = it.latitude
-                this.longitude = it.longitude
-            }
-
-            setCurrentLocation(location, "current", "curr")
-            getWeatherData(it.latitude, it.longitude)
-        }
+//        gMap.setOnMapLongClickListener {
+//            currentPosition = it
+//
+//            val location = Location("").apply {
+//                this.latitude = it.latitude
+//                this.longitude = it.longitude
+//            }
+//
+//            setCurrentLocation(location, "current", "curr")
+//            getWeatherData(it.latitude, it.longitude)
+//        }
 
         val tileProvider: TileProvider = object : UrlTileProvider(256, 256) {
             override fun getTileUrl(x: Int, y: Int, z: Int): URL? {
@@ -150,6 +139,8 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 //                .tileProvider(tileProvider)
 //                .transparency(0.9f)
 //        )!!
+
+        getPolyLine(9)
     }
 
     private fun makeIcelandList() {
@@ -167,6 +158,23 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
         iceLandList.add(jokulsarlon)
         iceLandList.add(vik)
         iceLandList.add(diamondBeach)
+    }
+
+    private fun setCustomMapStyle() {
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            val success = googleMap!!.setMapStyle(
+                MapStyleOptions.loadRawResourceStyle(
+                    this, R.raw.night_style_json
+                )
+            )
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", e)
+        }
     }
 
     private fun setDefaultLocation() {
@@ -229,5 +237,50 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                 Log.d(TAG, t.message ?: "통신오류")
             }
         })
+    }
+
+    private fun getPolyLine(kpIndex: Int) {
+        if (kpIndex >= 9) {
+//            val polyline = PolylineOptions()
+//                .add(LatLng(45.45, -67.77))   // 0
+//                .add(LatLng(58.44, -23.35))   // 30
+//                .add(LatLng(58.68, 5.22))     // 60
+//                .add(LatLng(62.72, 37.92))    // 90
+//                .add(LatLng(64.28, 65.87))    // 120
+//                .add(LatLng(61.98, 99.79))    // 150
+//                .add(LatLng(58.70, 131.343))  // 180
+//                .add(LatLng(58.38, 162.30))   // 210
+//                .add(LatLng(54.16, -170.24))  // 240
+//                .add(LatLng(52.13, -142.765)) // 270
+//                .add(LatLng(49.0, -124.772))  // 300
+//                .add(LatLng(45.02, -99.676))  // 330
+//                .add(LatLng(45.45, -67.77))   // 0
+//                .color(Color.BLUE)
+//                .geodesic(true)
+            var polygon = PolygonOptions()
+                .add(
+                    LatLng(45.45, -67.77),
+                    LatLng(58.44, -23.35),
+                    LatLng(58.68, 5.22),
+                    LatLng(62.72, 37.92),
+                    LatLng(64.28, 65.87),
+                    LatLng(61.98, 99.79),
+                    LatLng(58.70, 131.343),
+                    LatLng(58.38, 162.30),
+                    LatLng(54.16, -170.24),
+                    LatLng(52.13, -142.765),
+                    LatLng(49.0, -124.772),
+                    LatLng(45.02, -99.676),
+                    LatLng(50.0, -99.676),
+                    LatLng(50.0, -60.70),
+                    LatLng(45.02, -99.676),
+                    LatLng(45.45, -67.77)
+                )
+                .strokeColor(Color.BLUE)
+                .fillColor(Color.GREEN)
+//            googleMap?.addPolyline(polyline)
+
+            googleMap?.addPolygon(polygon)
+        }
     }
 }
