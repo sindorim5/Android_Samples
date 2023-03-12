@@ -76,28 +76,28 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
 
-//        normalMarkerCollection.setOnMarkerClickListener {
-//            GoogleMap.OnMarkerClickListener { marker ->
-//                Log.d(TAG, "onMapReady: ${marker.title}")
-//                Toast.makeText(
-//                    this,
-//                    "lat:${marker.position.latitude}\nlng:${marker.position.longitude}",
-//                    Toast.LENGTH_SHORT
-//                ).show()
-//                false
-//            }
-//            false
-//        }
-
-        clusterManager.setOnClusterItemClickListener {
-            Log.d(TAG, "onMapReady: click")
-            Toast.makeText(
-                this,
-                "lat:${it.position.latitude}\nlng:${it.position.longitude}",
-                Toast.LENGTH_SHORT
-            ).show()
+        normalMarkerCollection.setOnMarkerClickListener {
+            googleMap?.setOnMarkerClickListener { marker ->
+                Log.d(TAG, "onMapReady: ${marker.title}")
+                Toast.makeText(
+                    this,
+                    "lat:${marker.position.latitude}\nlng:${marker.position.longitude}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                false
+            }
             false
         }
+
+//        clusterManager.setOnClusterItemClickListener {
+//            Log.d(TAG, "onMapReady: click")
+//            Toast.makeText(
+//                this,
+//                "lat:${it.position.latitude}\nlng:${it.position.longitude}",
+//                Toast.LENGTH_SHORT
+//            ).show()
+//            false
+//        }
 
 //        gMap.setOnMapLongClickListener {
 //            currentPosition = it
@@ -241,23 +241,7 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getPolyLine(kpIndex: Int) {
         if (kpIndex >= 9) {
-//            val polyline = PolylineOptions()
-//                .add(LatLng(45.45, -67.77))   // 0
-//                .add(LatLng(58.44, -23.35))   // 30
-//                .add(LatLng(58.68, 5.22))     // 60
-//                .add(LatLng(62.72, 37.92))    // 90
-//                .add(LatLng(64.28, 65.87))    // 120
-//                .add(LatLng(61.98, 99.79))    // 150
-//                .add(LatLng(58.70, 131.343))  // 180
-//                .add(LatLng(58.38, 162.30))   // 210
-//                .add(LatLng(54.16, -170.24))  // 240
-//                .add(LatLng(52.13, -142.765)) // 270
-//                .add(LatLng(49.0, -124.772))  // 300
-//                .add(LatLng(45.02, -99.676))  // 330
-//                .add(LatLng(45.45, -67.77))   // 0
-//                .color(Color.BLUE)
-//                .geodesic(true)
-            var polygon = PolygonOptions()
+            val polylineOptions = PolylineOptions()
                 .add(
                     LatLng(45.45, -67.77),
                     LatLng(58.44, -23.35),
@@ -271,16 +255,30 @@ class MainActivity : AppCompatActivity(), OnMapReadyCallback {
                     LatLng(52.13, -142.765),
                     LatLng(49.0, -124.772),
                     LatLng(45.02, -99.676),
-                    LatLng(50.0, -99.676),
-                    LatLng(50.0, -60.70),
-                    LatLng(45.02, -99.676),
                     LatLng(45.45, -67.77)
                 )
-                .strokeColor(Color.BLUE)
-                .fillColor(Color.GREEN)
-//            googleMap?.addPolyline(polyline)
+                .color(Color.BLUE)
+                .width(10.0F)
+                .clickable(true)
+                .geodesic(true)
+//            var polygon = PolygonOptions()
+//                .add(
+//                    LatLng(60.0, 0.0),
+//                    LatLng(60.0, 180.0),
+//                    LatLng(60.0, -0.0),
+//                    LatLng(50.0, -0.0),
+//                    LatLng(50.0, 180.0),
+//                    LatLng(50.0, 0.0),
+//                    LatLng(60.0, 0.0)
+//                )
+//                .strokeColor(Color.BLUE)
+//                .fillColor(Color.GREEN)
+            googleMap?.addPolyline(polylineOptions)
 
-            googleMap?.addPolygon(polygon)
+//            googleMap?.addPolygon(polygon)
+        }
+        else if (kpIndex >= 7) {
+
         }
     }
 }
