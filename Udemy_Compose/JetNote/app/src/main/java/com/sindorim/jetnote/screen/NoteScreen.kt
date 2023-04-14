@@ -1,5 +1,6 @@
 package com.sindorim.jetnote.screen
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.rounded.Notifications
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -26,6 +28,7 @@ import com.sindorim.jetnote.components.NoteButton
 import com.sindorim.jetnote.components.NoteInputText
 import com.sindorim.jetnote.data.NoteDataSource
 import com.sindorim.jetnote.model.Note
+import com.sindorim.jetnote.util.formatDate
 import java.time.format.DateTimeFormatter
 
 @ExperimentalComposeUiApi
@@ -39,23 +42,37 @@ fun NoteScreen(
     var description by remember { mutableStateOf("") }
     val context = LocalContext.current
 
-    Column(modifier = Modifier.padding(6.dp)) {
+    Column() {
         TopAppBar(
+            navigationIcon = {
+                IconButton(onClick = {
+                    Toast.makeText(context, "Nav Clicked", Toast.LENGTH_SHORT).show()
+                }) {
+                    Icon(
+                        imageVector = Icons.Filled.Menu,
+                        contentDescription = "Menu"
+                    )
+                }
+            },
             title = {
                 Text(text = stringResource(id = R.string.app_name))
             },
             actions = {
-                Icon(
-                    imageVector = Icons.Rounded.Notifications,
-                    contentDescription = "Icon"
-                )
+                IconButton(onClick = {
+                    Toast.makeText(context, "Action Clicked", Toast.LENGTH_SHORT).show()
+                }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Notifications,
+                        contentDescription = "Icon"
+                    )
+                }
             },
             backgroundColor = Color(0xFFDADFE3)
         ) // End of TopAppBar
 
         // Content
         Column(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().padding(6.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             NoteInputText(
@@ -101,13 +118,15 @@ fun NoteScreen(
         Divider(modifier = Modifier.padding(10.dp))
         LazyColumn {
             items(notes) { note ->
-                NoteRow(note = note,
+                NoteRow(
+                    note = note,
                     onNoteClicked = {
-                    onRemoveNote(note)
-                })
+                        onRemoveNote(note)
+                        Toast.makeText(context, "Note Removed", Toast.LENGTH_SHORT).show()
+                    }
+                )
             }
-        }
-
+        } // End of LazyColumn
     } // End of NoteScreen Column
 } // End of NoteScreen
 
@@ -127,14 +146,17 @@ fun NoteRow(
     ) {
         Column(
             modifier
-                .clickable { onNoteClicked(note) }
+                .clickable {
+                    onNoteClicked(note)
+                    Log.d("SDR", "NoteRow: ${note.title}")
+                }
                 .padding(horizontal = 14.dp, vertical = 6.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Text(text = note.title, style = MaterialTheme.typography.subtitle2)
             Text(text = note.description, style = MaterialTheme.typography.subtitle1)
             Text(
-                text = note.entryDate.format(DateTimeFormatter.ofPattern("EEE, d MMM")),
+                text = formatDate(note.entryDate.time),
                 style = MaterialTheme.typography.caption
             )
         } // End of Column
