@@ -11,12 +11,14 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.sindorim.jetweatherforecast.navigation.WeatherNavigation
 import com.sindorim.jetweatherforecast.ui.theme.JetWeatherForecastTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalComposeUiApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,6 +29,7 @@ class MainActivity : ComponentActivity() {
     } // End of onCreate
 } // End of MainActivity
 
+@ExperimentalComposeUiApi
 @Composable
 fun WeatherApp() {
     JetWeatherForecastTheme {
@@ -46,6 +49,7 @@ fun WeatherApp() {
 
 
 @Preview(showBackground = true)
+@ExperimentalComposeUiApi
 @Composable
 fun DefaultPreview() {
     WeatherApp()

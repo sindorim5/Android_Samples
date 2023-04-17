@@ -7,8 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +19,7 @@ import androidx.navigation.NavController
 import com.sindorim.jetweatherforecast.data.DataOrException
 import com.sindorim.jetweatherforecast.model.*
 import com.sindorim.jetweatherforecast.navigation.WeatherScreens
+import com.sindorim.jetweatherforecast.screens.settings.SettingsViewModel
 import com.sindorim.jetweatherforecast.utils.formatDate
 import com.sindorim.jetweatherforecast.utils.formatDecimals
 import com.sindorim.jetweatherforecast.widgets.*
@@ -30,32 +30,49 @@ private const val TAG = "MainScreen_SDR"
 fun MainScreen(
     navController: NavController,
     mainViewModel: MainViewModel = hiltViewModel(),
+    settingsViewModel: SettingsViewModel = hiltViewModel(),
     city: String?
 ) {
-    val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
-        initialValue = DataOrException(loading = true)
-    ) {
-        value = mainViewModel.getWeatherData(city = city.toString())
+    val currentCity: String = if (city.isNullOrBlank()) "Seoul" else city
 
-    }.value
+    val unitFromDb = settingsViewModel.unitList.collectAsState().value
 
-    if (weatherData.loading == true) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            CircularProgressIndicator()
-        }
-    } else if (weatherData.data != null) {
-        MainScaffold(weather = weatherData.data!!, navController)
+    var unit by remember {
+        mutableStateOf("imperial")
     }
 
+    var isImperial by remember {
+        mutableStateOf(false)
+    }
+
+    if (unitFromDb.isNotEmpty()) {
+        unit = unitFromDb[0].unit.split(" ")[0].lowercase()
+        isImperial = unit == "imperial"
+
+        val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
+            initialValue = DataOrException(loading = true)
+        ) {
+            value = mainViewModel.getWeatherData(city = currentCity, units = unit)
+
+        }.value
+
+        if (weatherData.loading == true) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
+            }
+        } else if (weatherData.data != null) {
+            MainScaffold(weather = weatherData.data!!, navController, isImperial = isImperial)
+        }
+    }
 
 } // End of MainScreen
 
 @Composable
-fun MainScaffold(weather: Weather, navController: NavController) {
+fun MainScaffold(weather: Weather, navController: NavController, isImperial: Boolean) {
     Scaffold(topBar = {
         WeatherAppBar(
             title = weather.city.name + ", ${weather.city.country}",
@@ -68,12 +85,12 @@ fun MainScaffold(weather: Weather, navController: NavController) {
             Log.d(TAG, "MainScaffold: Button Clicked")
         }
     }) {
-        MainContent(data = weather)
+        MainContent(data = weather, isImperial = isImperial)
     }
 } // End of MainScaffold
 
 @Composable
-fun MainContent(data: Weather) {
+fun MainContent(data: Weather, isImperial: Boolean) {
     val weatherItem = data.list[0]
     // imageUrl of Today
     val imageUrl = "https://openweathermap.org/img/wn/${weatherItem.weather[0].icon}.png"
@@ -116,7 +133,7 @@ fun MainContent(data: Weather) {
             } // End of CircleColumn
         } // End of CircleSurface
 
-        HumidityWindPressureRow(weather = weatherItem)
+        HumidityWindPressureRow(weather = weatherItem, isImperial = isImperial)
         Divider()
         SunsetSunriseRow(weather = weatherItem)
 

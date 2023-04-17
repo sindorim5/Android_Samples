@@ -39,7 +39,9 @@ fun WeatherDetailRow(weather: WeatherItem) {
         color = Color.White
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 8.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -124,7 +126,7 @@ fun SunsetSunriseRow(weather: WeatherItem) {
 } // End of SunsetSunriseRow
 
 @Composable
-fun HumidityWindPressureRow(weather: WeatherItem) {
+fun HumidityWindPressureRow(weather: WeatherItem, isImperial: Boolean) {
     Row(
         modifier = Modifier
             .padding(12.dp)
@@ -162,7 +164,10 @@ fun HumidityWindPressureRow(weather: WeatherItem) {
                     .size(20.dp)
                     .padding(end = 6.dp)
             )
-            Text(text = "${weather.speed} m/s", style = MaterialTheme.typography.caption)
+            Text(
+                text = "${formatDecimals(weather.speed)} " + if (isImperial) "mph" else "m/s",
+                style = MaterialTheme.typography.caption
+            )
         } // End of Wind Row
     } // End of OutsideRow
 } // End of HumidityWindPressureRow

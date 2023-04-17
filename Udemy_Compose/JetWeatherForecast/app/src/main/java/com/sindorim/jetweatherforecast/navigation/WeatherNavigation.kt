@@ -10,8 +10,12 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.sindorim.jetweatherforecast.screens.main.MainScreen
 import com.sindorim.jetweatherforecast.screens.WeatherSplashScreen
+import com.sindorim.jetweatherforecast.screens.about.AboutScreen
+import com.sindorim.jetweatherforecast.screens.favorites.FavoriteScreen
+import com.sindorim.jetweatherforecast.screens.favorites.FavoriteViewModel
 import com.sindorim.jetweatherforecast.screens.main.MainViewModel
 import com.sindorim.jetweatherforecast.screens.search.SearchScreen
+import com.sindorim.jetweatherforecast.screens.settings.SettingsScreen
 
 @ExperimentalComposeUiApi
 @Composable
@@ -42,5 +46,19 @@ fun WeatherNavigation() {
         composable(WeatherScreens.SearchScreen.name) {
             SearchScreen(navController = navController)
         }
+
+        composable(WeatherScreens.AboutScreen.name) {
+            AboutScreen(navController = navController)
+        }
+
+        composable(WeatherScreens.FavoriteScreen.name) {
+            val favoriteViewModel = hiltViewModel<FavoriteViewModel>()
+            FavoriteScreen(navController = navController, favoriteViewModel)
+        }
+
+        composable(WeatherScreens.SettingsScreen.name) {
+            SettingsScreen(navController = navController)
+        }
+
     }
 }
