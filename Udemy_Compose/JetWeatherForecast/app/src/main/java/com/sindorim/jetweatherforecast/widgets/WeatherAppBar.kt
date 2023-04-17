@@ -7,6 +7,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -29,6 +32,13 @@ fun WeatherAppBar(
     onAddActionClicked: () -> Unit = {},
     onButtonClicked: () -> Unit = {}
 ) {
+    val showDialog = remember {
+        mutableStateOf(false)
+    }
+
+    if (showDialog.value) {
+        ShowSettingDropDownMenu(showDialog = showDialog, navController = navController)
+    }
 
     TopAppBar(
         title = {
@@ -40,13 +50,13 @@ fun WeatherAppBar(
         },
         actions = {
             if (isMainScreen) {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { onAddActionClicked.invoke() }) {
                     Icon(
                         imageVector = Icons.Default.Search,
                         contentDescription = "Search Icon"
                     )
                 }
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { showDialog.value = true }) {
                     Icon(
                         imageVector = Icons.Rounded.MoreVert,
                         contentDescription = "More Icon"
@@ -72,6 +82,7 @@ fun WeatherAppBar(
         backgroundColor = Color.Transparent,
         elevation = elevation
     ) // End of TopAppBar
-
-
 } // End of WeatherAppBar
+
+@Composable
+fun ShowSettingDropDownMenu(showDialog: MutableState<>)

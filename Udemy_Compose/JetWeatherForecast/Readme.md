@@ -2,7 +2,23 @@
 
 ## Navigation
 - `implementation "androidx.navigation:navigation-compose:$nav_version"`
-- `navController.navigate(route = WeatherScreens.MainScreen.name, )`
+```kotlin
+    navController.navigate(route = WeatherScreens.MainScreen.name + "/$defaultCity")
+
+    // path variable
+    val route = WeatherScreens.MainScreen.name
+    composable(
+        route = "$route/{city}",
+        arguments = listOf(navArgument(name = "city") {
+            type = NavType.StringType
+        })
+    ) { navBack ->
+        navBack.arguments?.getString("city").let { city ->
+            val mainViewModel = hiltViewModel<MainViewModel>()
+            MainScreen(navController = navController, mainViewModel, city = city)
+        }
+    }
+```
 
 ## LaunchedEffect
 - Composable에서 Composition이 일어날 때 suspend fun을 실행시켜주는 Composition

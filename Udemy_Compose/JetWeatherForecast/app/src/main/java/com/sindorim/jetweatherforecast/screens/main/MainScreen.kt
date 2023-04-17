@@ -19,29 +19,34 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.sindorim.jetweatherforecast.data.DataOrException
 import com.sindorim.jetweatherforecast.model.*
+import com.sindorim.jetweatherforecast.navigation.WeatherScreens
 import com.sindorim.jetweatherforecast.utils.formatDate
 import com.sindorim.jetweatherforecast.utils.formatDecimals
-import com.sindorim.jetweatherforecast.widgets.HumidityWindPressureRow
-import com.sindorim.jetweatherforecast.widgets.SunsetSunriseRow
-import com.sindorim.jetweatherforecast.widgets.WeatherAppBar
-import com.sindorim.jetweatherforecast.widgets.WeatherDetailRow
+import com.sindorim.jetweatherforecast.widgets.*
 
 private const val TAG = "MainScreen_SDR"
 
 @Composable
 fun MainScreen(
     navController: NavController,
-    mainViewModel: MainViewModel = hiltViewModel()
+    mainViewModel: MainViewModel = hiltViewModel(),
+    city: String?
 ) {
     val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
         initialValue = DataOrException(loading = true)
     ) {
-        value = mainViewModel.getWeatherData(city = "seoul")
+        value = mainViewModel.getWeatherData(city = city.toString())
 
     }.value
 
     if (weatherData.loading == true) {
-        CircularProgressIndicator()
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            CircularProgressIndicator()
+        }
     } else if (weatherData.data != null) {
         MainScaffold(weather = weatherData.data!!, navController)
     }
@@ -55,6 +60,9 @@ fun MainScaffold(weather: Weather, navController: NavController) {
         WeatherAppBar(
             title = weather.city.name + ", ${weather.city.country}",
             navController = navController,
+            onAddActionClicked = {
+                              navController.navigate(WeatherScreens.SearchScreen.name)
+            },
             elevation = 5.dp
         ) {
             Log.d(TAG, "MainScaffold: Button Clicked")
@@ -135,7 +143,5 @@ fun MainContent(data: Weather) {
                 }
             } // End of LazyColumn
         } // End of ThisWeek Surface
-
-
     } // End of MainColumn
 } // End of MainContent
