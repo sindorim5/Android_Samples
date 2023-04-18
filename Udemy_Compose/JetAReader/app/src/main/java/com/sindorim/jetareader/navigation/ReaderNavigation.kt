@@ -1,6 +1,7 @@
 package com.sindorim.jetareader.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -8,6 +9,7 @@ import com.sindorim.jetareader.screens.SplashScreen
 import com.sindorim.jetareader.screens.home.ReaderHomeScreen
 import com.sindorim.jetareader.screens.login.LoginScreen
 
+@ExperimentalComposeUiApi
 @Composable
 fun ReaderNavigation() {
     val navController = rememberNavController()

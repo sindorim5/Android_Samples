@@ -10,12 +10,14 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.sindorim.jetareader.navigation.ReaderNavigation
 import com.sindorim.jetareader.ui.theme.JetAReaderTheme
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalComposeUiApi
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +30,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
 fun ReaderApp() {
     Surface(
@@ -46,6 +49,7 @@ fun ReaderApp() {
 }
 
 @Preview(showBackground = true)
+@ExperimentalComposeUiApi
 @Composable
 fun DefaultPreview() {
     JetAReaderTheme {

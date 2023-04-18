@@ -20,6 +20,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.firebase.auth.FirebaseAuth
 import com.sindorim.jetareader.components.ReaderLogo
 import com.sindorim.jetareader.navigation.ReaderScreens
 import kotlinx.coroutines.delay
@@ -42,10 +43,15 @@ fun SplashScreen(navController: NavController) {
 
         delay(2000L)
 
-        navController.navigate(ReaderScreens.LoginScreen.name) {
-            popUpTo(ReaderScreens.SplashScreen.name) { inclusive = true }
+        if (FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
+            navController.navigate(ReaderScreens.LoginScreen.name) {
+                popUpTo(ReaderScreens.SplashScreen.name) { inclusive = true }
+            }
+        }else {
+            navController.navigate(ReaderScreens.ReaderHomeScreen.name) {
+                popUpTo(ReaderScreens.SplashScreen.name) { inclusive = true }
+            }
         }
-
 
     } // End of LaunchedEffect
 
@@ -72,9 +78,6 @@ fun SplashScreen(navController: NavController) {
             )
 
         } // End of Column
-
-
     } // End of Surface
-
 } // End of SplashScreen
 
