@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sindorim.jetareader.screens.SplashScreen
 import com.sindorim.jetareader.screens.home.ReaderHomeScreen
 import com.sindorim.jetareader.screens.login.LoginScreen
+import com.sindorim.jetareader.screens.stats.ReaderStatsScreen
 
 @ExperimentalComposeUiApi
 @Composable
@@ -24,6 +25,10 @@ fun ReaderNavigation() {
 
         composable(ReaderScreens.LoginScreen.name) {
             LoginScreen(navController = navController)
+        }
+
+        composable(ReaderScreens.ReaderStatsScreen.name) {
+            ReaderStatsScreen(navController = navController)
         }
 
         composable(ReaderScreens.ReaderHomeScreen.name) {

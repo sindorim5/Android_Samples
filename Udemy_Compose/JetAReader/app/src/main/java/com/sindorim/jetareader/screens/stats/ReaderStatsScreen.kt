@@ -1,8 +1,10 @@
 package com.sindorim.jetareader.screens.stats
 
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 
 @Composable
-fun ReaderStatsScreen() {
-
+fun ReaderStatsScreen(navController: NavHostController) {
+    Text("i am stats")
 }
