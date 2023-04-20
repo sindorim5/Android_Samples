@@ -1,0 +1,80 @@
+package com.sindorim.beacontest
+
+import android.annotation.SuppressLint
+import android.app.Application
+import android.bluetooth.BluetoothManager
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.*
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import org.altbeacon.beacon.*
+import java.util.*
+
+private const val TAG = "MainViewModel_SSAFY"
+
+class MainViewModel(application: Application) : AndroidViewModel(application) {
+    var beaconList : MutableState<List<Beacon>> = mutableStateOf(emptyList())
+
+    val isScan = mutableStateOf(false)
+
+    private val beaconManager = BeaconManager.getInstanceForApplication(application)
+    private val region = Region(
+        "estimote",
+        Identifier.parse(BEACON_UUID),
+        null,
+        null
+    )
+
+    fun scanToggle() {
+        if (!isScan.value) {
+            isScan.value = true
+            beaconManager.apply {
+                beaconParsers.add(BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
+                addMonitorNotifier(monitorNotifier)
+                addRangeNotifier(rangeNotifier)
+                startMonitoring(region)
+                startRangingBeacons(region)
+            }
+        } else {
+            isScan.value = false
+            beaconManager.stopMonitoring(region)
+            beaconManager.stopRangingBeacons(region)
+        }
+    } // End of scanToggle
+
+    private var monitorNotifier: MonitorNotifier = object : MonitorNotifier {
+        override fun didEnterRegion(region: Region) { //발견 함.
+            Log.d(TAG, "I just saw an beacon for the first time!")
+        }
+
+        override fun didExitRegion(region: Region) { //발견 못함.
+            Log.d(TAG, "I no longer see an beacon")
+        }
+
+        override fun didDetermineStateForRegion(state: Int, region: Region) { //상태변경
+            Log.d(TAG, "I have just switched from seeing/not seeing beacons: $state")
+        }
+    } // End of monitorNotifier
+
+    //매초마다 해당 리전의 beacon 정보들을 collection으로 제공받아 처리한다.
+    private var rangeNotifier: RangeNotifier = object : RangeNotifier {
+        override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {
+            beacons?.run {
+                beaconList.value = beacons.toList()
+            }
+        }
+    } // End of rangeNotifier
+
+    companion object {
+        private const val PERMISSION_REQUEST_CODE = 8
+        private const val BEACON_UUID = "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0"
+        private const val BEACON_MAJOR = "40011"
+        private const val BEACON_MINOR = "33158"
+        private const val BLUETOOTH_ADDRESS = "AC:23:3F:F6:BD:46"
+        private const val BEACON_DISTANCE = 5.0
+    }
+}
