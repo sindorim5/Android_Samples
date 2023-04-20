@@ -126,7 +126,7 @@ fun HomeTopAppBar(
 @Composable
 fun BeaconListView(mainViewModel: MainViewModel) {
     val beacons = mainViewModel.beaconList.value
-    LazyColumn(modifier = Modifier.fillMaxHeight(0.6f)) {
+    LazyColumn(modifier = Modifier.fillMaxHeight()) {
         items(beacons) { beacon ->
             ListCard(beacon)
         }
@@ -145,7 +145,11 @@ fun ListCard(beacon: Beacon) {
         Column(modifier = Modifier.padding(horizontal = 20.dp)) {
             Text(text = "Major: ${beacon.id2}")
             Text(text = "Minor: ${beacon.id3}")
-            Text(text = "Distance: ${beacon.distance} meters")
+            Text(text = "Distance: ${roundToTwoDecimalPlace(beacon.distance)} meters")
+            Text(text = "mDistance: ${(myDistance(beacon.txPower, beacon.runningAverageRssi))}")
+            Text(text = "Rssi: ${beacon.rssi}")
+            Text(text = "Rssi: ${beacon.runningAverageRssi}")
+
         }
     }
 }
