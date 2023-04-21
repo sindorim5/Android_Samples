@@ -18,7 +18,7 @@ private const val TAG = "MainViewModel_SSAFY"
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     var beaconList : MutableState<List<Beacon>> = mutableStateOf(emptyList())
-
+    var nowLocation = mutableStateOf(doubleArrayOf(0.0, 0.0))
     val isScan = mutableStateOf(false)
 
     private val beaconManager = BeaconManager.getInstanceForApplication(application)
@@ -65,10 +65,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         override fun didRangeBeaconsInRegion(beacons: MutableCollection<Beacon>?, region: Region?) {
             beacons?.run {
                 beaconList.value = beacons.toList()
+                getMyLocation(beacons.toList())
             }
         }
     } // End of rangeNotifier
 
+    fun getMyLocation(beacons: List<Beacon>) {
+        if (beacons.size < 3) {
+            Log.d(TAG, "loc_0: $beacons")
+            return
+        } else {
+            var sortedList = beacons.sortedBy { it.distance }
+            var centroid = trilateration(sortedList)
+            for (i in centroid.indices) {
+                Log.d(TAG, "loc_cen${i}: ${centroid[i]}")
+            }
+            nowLocation.value = centroid
+            return
+        }
+    }
     companion object {
         private const val PERMISSION_REQUEST_CODE = 8
         private const val BEACON_UUID = "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0"

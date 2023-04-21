@@ -17,7 +17,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -70,7 +74,10 @@ fun Home(mainViewModel: MainViewModel) {
                 onClick = {
                     Log.d("SSAFY_PERMISSION", "Home: ${btPermissionsState.allPermissionsGranted}")
                     for (i in btPermissionsState.permissions.indices) {
-                        Log.d("SSAFY_PERMISSION", "${btPermissionsState.permissions[i]}: ${btPermissionsState.permissions[i].status}")
+                        Log.d(
+                            "SSAFY_PERMISSION",
+                            "${btPermissionsState.permissions[i]}: ${btPermissionsState.permissions[i].status}"
+                        )
                     }
 
                     if (btPermissionsState.allPermissionsGranted) {
@@ -84,7 +91,7 @@ fun Home(mainViewModel: MainViewModel) {
                 } else {
                     "Stop Scan"
                 }
-            )
+            ) // End of HomeTopAppBar
         },
         modifier = Modifier
             .fillMaxWidth()
@@ -98,6 +105,12 @@ fun Home(mainViewModel: MainViewModel) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             BeaconListView(mainViewModel)
+            MyLocationTextView(
+                modifier = Modifier
+                    .align(Alignment.Start)
+                    .padding(start = 8.dp),
+                mainViewModel
+            )
         }
     }
 } // End of Home
@@ -124,14 +137,40 @@ fun HomeTopAppBar(
 } // End of HomeTopAppBar
 
 @Composable
+fun MyLocationTextView(
+    modifier: Modifier = Modifier,
+    mainViewModel: MainViewModel
+) {
+    Column(modifier = modifier) {
+        Text(text = buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    color = Color.Black.copy(0.8f),
+                    fontWeight = FontWeight.Bold
+                )
+            ) {
+                append("My Location")
+            }
+        })
+        Text(
+            text = "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[0])}, ${
+                roundToTwoDecimalPlace(
+                    mainViewModel.nowLocation.value[1]
+                )
+            }"
+        )
+    }
+}
+
+@Composable
 fun BeaconListView(mainViewModel: MainViewModel) {
     val beacons = mainViewModel.beaconList.value
-    LazyColumn(modifier = Modifier.fillMaxHeight()) {
+    LazyColumn(modifier = Modifier.fillMaxHeight(0.8f)) {
         items(beacons) { beacon ->
             ListCard(beacon)
         }
     }
-}
+} // End of BeaconListView
 
 @Composable
 fun ListCard(beacon: Beacon) {
@@ -149,7 +188,6 @@ fun ListCard(beacon: Beacon) {
             Text(text = "mDistance: ${(myDistance(beacon.txPower, beacon.runningAverageRssi))}")
             Text(text = "Rssi: ${beacon.rssi}")
             Text(text = "Rssi: ${beacon.runningAverageRssi}")
-
         }
     }
 }

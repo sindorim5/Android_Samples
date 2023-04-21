@@ -69,4 +69,8 @@ dependencies {
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1"
+
+    // trilateration
+    implementation 'com.lemmingapex.trilateration:trilateration:1.0.2'
+
 }
