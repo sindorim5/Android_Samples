@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Logout
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -103,9 +101,12 @@ fun HomeContent(navController: NavController = NavController(LocalContext.curren
                     overflow = TextOverflow.Clip
                 ) // End of Name Text
                 Divider()
-            }
+            } // End of Column
 
         } // End of Title Row
+
+        ListCard()
+
     } // End of User Column
 } // End of HomeContent
 
@@ -145,7 +146,7 @@ fun ListCard(
         ) {
             Row(horizontalArrangement = Arrangement.Center) {
                 Image(
-                    painter = rememberAsyncImagePainter(model = ""),
+                    painter = rememberAsyncImagePainter(model = "http://books.google.com/books/content?id=hTJaEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"),
                     contentDescription = "Book Image",
                     modifier = Modifier
                         .height(140.dp)
@@ -154,13 +155,99 @@ fun ListCard(
                 ) // End of Book Image
                 Spacer(modifier = Modifier.width(50.dp))
 
-                Column() {
+                Column(
+                    modifier = Modifier.padding(top = 25.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.FavoriteBorder,
+                        contentDescription = "Fav Icon",
+                        modifier = Modifier.padding(bottom = 1.dp)
+                    )
 
-                }
-            }
+                    BookRating(score = 3.5)
+                } // End of Star Column
+            } // End of Heart and Star Row
+            Text(
+                text = "Book Title",
+                modifier = Modifier.padding(4.dp),
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+
+            Text(
+                text = "Authors",
+                modifier = Modifier.padding(4.dp),
+                style = MaterialTheme.typography.caption
+            )
+        } // End of Upper Column
+
+        Row(
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.Bottom
+        ) {
+            RoundedButton(label = "Reading", radius = 70)
         }
+
     } // End of Card
 } // End of ListCard
+
+@Composable
+fun RoundedButton(
+    label: String = "Reading",
+    radius: Int = 29,
+    onPressed: () -> Unit = {}
+) {
+    Surface(
+        modifier = Modifier.clip(
+            shape = RoundedCornerShape(
+                bottomEndPercent = radius,
+                topStartPercent = radius
+            )
+        ),
+        color = Color(0xFF92CBDF)
+    ) {
+        Column(
+            modifier = Modifier
+                .width(90.dp)
+                .heightIn(40.dp)
+                .clickable { onPressed.invoke() },
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = label,
+                style = TextStyle(color = Color.White, fontSize = 15.sp)
+            )
+        } // End of Column
+    } // End of Surface
+} // End of RoundedButton
+
+@Composable
+fun BookRating(score: Double = 3.0) {
+    Surface(
+        modifier = Modifier
+            .height(70.dp)
+            .padding(4.dp),
+        shape = RoundedCornerShape(56.dp),
+        elevation = 6.dp,
+        color = Color.White
+    ) {
+        Column(
+            modifier = Modifier.padding(4.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Icon(
+                imageVector = Icons.Filled.StarBorder,
+                contentDescription = "Star",
+                modifier = Modifier.padding(3.dp)
+            )
+            Text(text = score.toString(), style = MaterialTheme.typography.subtitle1)
+        }
+    }
+}
 
 @Composable
 fun ReadingRightNowArea(books: List<MBook>, navController: NavController) {
