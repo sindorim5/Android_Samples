@@ -6,3 +6,7 @@
 - rememberSaveable은 화면회전과 같은 환경구성 변경 및 프로세스의 종료에서도 상태를 보존시킨다.
 
 ## Firebase Auth
+
+## produceState
+- coroutine scope 내부이므로 suspend function을 호출할 수 있다.
+- 내부에서는 LaunchedEffect를 사용한다.

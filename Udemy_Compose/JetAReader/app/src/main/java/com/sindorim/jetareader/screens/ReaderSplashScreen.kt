@@ -25,7 +25,6 @@ import com.sindorim.jetareader.components.ReaderLogo
 import com.sindorim.jetareader.navigation.ReaderScreens
 import kotlinx.coroutines.delay
 
-@Preview
 @Composable
 fun SplashScreen(navController: NavController) {
 
