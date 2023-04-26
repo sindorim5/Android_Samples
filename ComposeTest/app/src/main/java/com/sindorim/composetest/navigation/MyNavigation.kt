@@ -7,13 +7,16 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.sindorim.composetest.BottomSheetScreen3
 import com.sindorim.composetest.MainScreen
 import com.sindorim.composetest.ModalBottomSheetScreen
 import com.sindorim.composetest.ModalBottomSheetScreen3
 import com.sindorim.composetest.screens.search.SearchScreen
 import com.sindorim.composetest.screens.bottomsheets.BottomSheetScreen
+import com.sindorim.composetest.screens.stt.SpeechScreen
 
+@ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
@@ -48,6 +51,10 @@ fun MyNavigation() {
 
         composable(MyScreens.SearchScreen.name) {
             SearchScreen(navController = navController)
+        }
+
+        composable(MyScreens.SpeechScreen.name) {
+            SpeechScreen(navController = navController)
         }
 
     }

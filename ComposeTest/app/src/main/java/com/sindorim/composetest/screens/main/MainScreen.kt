@@ -70,6 +70,15 @@ fun MainScreen(
             ) {
                 Text(text = "Search", color = Color.White)
             }
+
+            Button(
+                onClick = {
+                    navController.navigate(MyScreens.SpeechScreen.name)
+                },
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Text(text = "Speech", color = Color.White)
+            }
         } // End of Column
     } // End of Surface
 } // End of MainScreen

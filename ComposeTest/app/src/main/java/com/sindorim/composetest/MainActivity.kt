@@ -15,11 +15,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.sindorim.composetest.navigation.MyNavigation
 import com.sindorim.composetest.screens.search.SearchScreen
 import com.sindorim.composetest.ui.theme.ComposeTestTheme
 
 class MainActivity : ComponentActivity() {
+
+    @ExperimentalPermissionsApi
     @ExperimentalComposeUiApi
     @ExperimentalMaterialApi
     @ExperimentalMaterial3Api
@@ -33,6 +36,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
