@@ -56,9 +56,19 @@ fun MainScreen(
             Button(
                 onClick = {
                     navController.navigate(MyScreens.ModalBottomSheetScreen3.name)
-                }
+                },
+                modifier = Modifier.padding(bottom = 8.dp)
             ) {
                 Text(text = "ModalBottomSheetScreen3", color = Color.White)
+            }
+
+            Button(
+                onClick = {
+                    navController.navigate(MyScreens.SearchScreen.name)
+                },
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Text(text = "Search", color = Color.White)
             }
         } // End of Column
     } // End of Surface

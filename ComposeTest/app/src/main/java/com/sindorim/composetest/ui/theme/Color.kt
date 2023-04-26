@@ -11,3 +11,4 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val BottomSheetColor = Color(0xFFF7F2F9)
+val iconColor = Color(0xFF6750A4)

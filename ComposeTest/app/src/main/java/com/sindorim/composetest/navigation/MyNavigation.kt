@@ -3,6 +3,7 @@ package com.sindorim.composetest.navigation
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -10,8 +11,10 @@ import com.sindorim.composetest.BottomSheetScreen3
 import com.sindorim.composetest.MainScreen
 import com.sindorim.composetest.ModalBottomSheetScreen
 import com.sindorim.composetest.ModalBottomSheetScreen3
+import com.sindorim.composetest.screens.search.SearchScreen
 import com.sindorim.composetest.screens.bottomsheets.BottomSheetScreen
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable
@@ -41,6 +44,10 @@ fun MyNavigation() {
 
         composable(MyScreens.ModalBottomSheetScreen3.name) {
             ModalBottomSheetScreen3(navController = navController)
+        }
+
+        composable(MyScreens.SearchScreen.name) {
+            SearchScreen(navController = navController)
         }
 
     }
