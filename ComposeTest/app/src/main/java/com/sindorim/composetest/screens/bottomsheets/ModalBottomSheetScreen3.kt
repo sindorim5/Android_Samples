@@ -54,7 +54,7 @@ fun ModalBottomSheetScreen3(
         ModalBottomSheet(
             onDismissRequest = { openBottomSheet = false },
             sheetState = bottomSheetState,
-            modifier = Modifier.fillMaxHeight()
+            modifier = Modifier.fillMaxHeight(0.8f).padding(bottom = 10.dp)
         ) {
             Row(
                 Modifier.fillMaxWidth(),

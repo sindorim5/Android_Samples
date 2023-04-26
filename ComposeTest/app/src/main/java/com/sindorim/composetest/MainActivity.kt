@@ -10,12 +10,17 @@ import androidx.compose.material3.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
 import com.sindorim.composetest.navigation.MyNavigation
+import com.sindorim.composetest.screens.search.SearchScreen
 import com.sindorim.composetest.ui.theme.ComposeTestTheme
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalComposeUiApi
     @ExperimentalMaterialApi
     @ExperimentalMaterial3Api
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +33,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalComposeUiApi
 @ExperimentalMaterialApi
 @ExperimentalMaterial3Api
 @Composable
@@ -41,6 +47,8 @@ fun ComposeTestApp() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             MyNavigation()
+//            val navController = NavController(LocalContext.current)
+//            SearchScreen(navController = navController)
         }
     }
 }
