@@ -56,6 +56,7 @@ fun AutoCompleteScreen(
     navController: NavController
 ) {
     val searchQueryState = rememberSaveable { mutableStateOf("") }
+    val dialogQueryState = remember { mutableStateOf("") }
     val setValue = remember { mutableStateOf("") }
     val autoCompleteSearchBarActiveState = remember { mutableStateOf(false) }
     val isRecording = rememberSaveable { mutableStateOf(false) }
@@ -195,6 +196,7 @@ fun AutoCompleteScreen(
                 Dialog(
                     onDismissRequest = {
                         isRecording.value = false
+                        searchQueryState.value = dialogQueryState.value
                         stopListening(speechRecognizer)
                     }
                 ) {
@@ -202,8 +204,8 @@ fun AutoCompleteScreen(
                         modifier = Modifier,
                         shape = RoundedCornerShape(24.dp)
                     ) {
-                        searchQueryState.value = ""
-                        SpeechDialogContent(transcription = searchQueryState)
+                        dialogQueryState.value = ""
+                        SpeechDialogContent(transcription = dialogQueryState)
                     }
                 }
             } // Dialog if-state
