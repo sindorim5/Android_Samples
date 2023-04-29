@@ -62,8 +62,8 @@ fun SearchScreen(navController: NavController) {
             .fillMaxHeight()
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(top = 16.dp),
+            verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             InputField(
@@ -87,6 +87,8 @@ fun SearchScreen(navController: NavController) {
                                     isRecording.value = true
                                     startListening(speechRecognizer, searchQueryState, isRecording)
                                 }
+                            } else {
+                                speechPermissionState.launchPermissionRequest()
                             }
                         },
                         modifier = Modifier.size(28.dp)

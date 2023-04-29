@@ -63,13 +63,11 @@ fun InputField(
 
     Card(
         modifier = Modifier
-            .fillMaxWidth(0.9f)
+            .fillMaxWidth()
             .height(64.dp)
             .focusRequester(focusRequester)
             .onFocusChanged {
-                if (it.isFocused) {
-                    onActiveChange(true)
-                }
+                onActiveChange(it.isFocused)
             }
             .semantics {
                 onClick {
@@ -86,7 +84,8 @@ fun InputField(
             ),
         shape = RoundedCornerShape(14.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = Color.White,
+            contentColor = Color.Transparent
         ),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 0.dp
@@ -240,4 +239,5 @@ fun startListening(
 
 fun stopListening(speechRecognizer: SpeechRecognizer) {
     speechRecognizer.stopListening()
+    speechRecognizer.destroy()
 } // End of stopListening
