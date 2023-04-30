@@ -210,7 +210,10 @@ fun startListening(
         override fun onRmsChanged(p0: Float) {}
         override fun onBufferReceived(p0: ByteArray?) {}
         override fun onEndOfSpeech() {}
-        override fun onError(p0: Int) {}
+        override fun onError(p0: Int) {
+            Log.d(TAG, "onError: ${p0}")
+            isRecording.value = false
+        }
 
         override fun onPartialResults(partialResults: Bundle?) {
             val matches = partialResults?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
