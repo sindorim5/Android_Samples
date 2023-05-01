@@ -3,7 +3,6 @@ package com.sindorim.composetest.screens.autocomplete
 import android.Manifest
 import android.speech.SpeechRecognizer
 import android.util.Log
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -18,7 +17,6 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.material3.ListItem
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -31,21 +29,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.zIndex
 import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.sindorim.composetest.screens.search.InputField
 import com.sindorim.composetest.screens.search.SpeechDialogContent
 import com.sindorim.composetest.screens.search.startListening
 import com.sindorim.composetest.screens.search.stopListening
-import com.sindorim.composetest.ui.theme.iconColor
+import com.sindorim.composetest.ui.theme.IconColor
 import com.sindorim.composetest.ui.theme.nanumSquareNeo
-import kotlinx.coroutines.delay
 
 @OptIn(
     ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class,
@@ -123,7 +117,7 @@ fun AutoCompleteScreen(
                         Icon(
                             imageVector = Icons.Default.Mic,
                             contentDescription = "Speech To Text",
-                            tint = iconColor
+                            tint = IconColor
                         )
                     }
                 }, // Mic Icon
@@ -139,7 +133,7 @@ fun AutoCompleteScreen(
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = "Search",
-                            tint = iconColor
+                            tint = IconColor
                         )
                     }
                 } // Search Icon

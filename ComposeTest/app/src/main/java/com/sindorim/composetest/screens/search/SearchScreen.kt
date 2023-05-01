@@ -2,7 +2,6 @@ package com.sindorim.composetest.screens.search
 
 import android.Manifest
 import android.speech.SpeechRecognizer
-import android.util.Log
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -21,7 +20,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -32,7 +30,7 @@ import androidx.navigation.NavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.sindorim.composetest.ui.theme.iconColor
+import com.sindorim.composetest.ui.theme.IconColor
 import com.sindorim.composetest.ui.theme.nanumSquareNeo
 
 private const val TAG = "SDR"
@@ -96,7 +94,7 @@ fun SearchScreen(navController: NavController) {
                         Icon(
                             imageVector = Icons.Default.Mic,
                             contentDescription = "Speech To Text",
-                            tint = iconColor
+                            tint = IconColor
                         )
                     }
                 }, // Mic Icon
@@ -112,7 +110,7 @@ fun SearchScreen(navController: NavController) {
                         Icon(
                             imageVector = Icons.Default.Search,
                             contentDescription = "Search",
-                            tint = iconColor
+                            tint = IconColor
                         )
                     }
                 } // Search Icon

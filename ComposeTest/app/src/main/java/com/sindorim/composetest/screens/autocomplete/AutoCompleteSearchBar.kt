@@ -1,6 +1,5 @@
 package com.sindorim.composetest.screens.autocomplete
 
-import android.widget.AutoCompleteTextView
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.*
 import androidx.compose.animation.core.CubicBezierEasing
@@ -29,10 +28,8 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.zIndex
 import com.sindorim.composetest.screens.search.InputField
-import com.sindorim.composetest.ui.theme.iconColor
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalComposeUiApi::class)
