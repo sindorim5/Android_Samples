@@ -110,7 +110,7 @@ fun ZoomableImage(
                 )
                 .pointerInput(Unit) {
                     detectTransformGestures(
-                        onGesture = { _, pan, gestureZoom, gestureRotate ->
+                        onGesture = { centroid, pan, gestureZoom, gestureRotate ->
                             angle += gestureRotate
                             zoom = (zoom * gestureZoom).coerceIn(1F..3F)
                             if (zoom > 1) {
