@@ -15,6 +15,7 @@ import com.sindorim.composetest.ModalBottomSheetScreen3
 import com.sindorim.composetest.screens.autocomplete.AutoCompleteScreen
 import com.sindorim.composetest.screens.search.SearchScreen
 import com.sindorim.composetest.screens.bottomsheets.BottomSheetScreen
+import com.sindorim.composetest.screens.gallery.GalleryScreen
 import com.sindorim.composetest.screens.stt.SpeechScreen
 
 @ExperimentalPermissionsApi
@@ -60,6 +61,10 @@ fun MyNavigation() {
 
         composable(MyScreens.AutoCompleteScreen.name) {
             AutoCompleteScreen(navController = navController)
+        }
+
+        composable(MyScreens.GalleryScreen.name) {
+            GalleryScreen(navController = navController)
         }
 
     }

@@ -8,7 +8,8 @@ enum class MyScreens {
     ModalBottomSheetScreen3,
     SearchScreen,
     SpeechScreen,
-    AutoCompleteScreen;
+    AutoCompleteScreen,
+    GalleryScreen;
 
     companion object  {
         fun fromRoute(route: String?): MyScreens
@@ -21,6 +22,7 @@ enum class MyScreens {
             SearchScreen.name -> SearchScreen
             SpeechScreen.name -> SpeechScreen
             AutoCompleteScreen.name -> AutoCompleteScreen
+            GalleryScreen.name -> GalleryScreen
             null -> MainScreen
             else -> throw IllegalArgumentException("Route $route is not recognized")
         }

@@ -1,6 +1,8 @@
 package com.sindorim.composetest
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material3.Button
@@ -16,15 +18,18 @@ import com.sindorim.composetest.navigation.MyScreens
 fun MainScreen(
     navController: NavController
 ) {
+    val scrollState = rememberScrollState()
     Surface(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Button(
                 onClick = {
@@ -87,6 +92,15 @@ fun MainScreen(
                 modifier = Modifier.padding(bottom = 8.dp)
             ) {
                 Text(text = "AutoComplete", color = Color.White)
+            }
+
+            Button(
+                onClick = {
+                    navController.navigate(MyScreens.GalleryScreen.name)
+                },
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Text(text = "Gallery", color = Color.White)
             }
 
         } // End of Column
