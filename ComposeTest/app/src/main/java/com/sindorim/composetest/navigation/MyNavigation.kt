@@ -1,5 +1,6 @@
 package com.sindorim.composetest.navigation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import com.sindorim.composetest.screens.bottomsheets.BottomSheetScreen
 import com.sindorim.composetest.screens.gallery.GalleryScreen
 import com.sindorim.composetest.screens.stt.SpeechScreen
 
+@ExperimentalFoundationApi
 @ExperimentalPermissionsApi
 @ExperimentalComposeUiApi
 @ExperimentalMaterialApi

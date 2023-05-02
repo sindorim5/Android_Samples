@@ -194,7 +194,7 @@ fun AutoCompleteScreen(
                         stopListening(speechRecognizer)
                     }
                 ) {
-                    androidx.compose.material.Surface(
+                    Surface(
                         modifier = Modifier,
                         shape = RoundedCornerShape(24.dp)
                     ) {

@@ -49,8 +49,7 @@ fun GalleryScreen(navController: NavController) {
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        ZoomableImage(model = "https://i.pinimg.com/564x/0b/4c/83/0b4c8348f7e0e89fc9089d0d5b320d68.jpg") {}
-//        DoubleTapAndPinchZoomImage(model = "https://i.pinimg.com/564x/0b/4c/83/0b4c8348f7e0e89fc9089d0d5b320d68.jpg")
+        ZoomableImage(model = "https://i.pinimg.com/564x/0b/4c/83/0b4c8348f7e0e89fc9089d0d5b320d68.jpg")
     }
 
 }
@@ -60,7 +59,6 @@ fun GalleryScreen(navController: NavController) {
 fun ZoomableImage(
     model: Any,
     contentDescription: String? = null,
-    onBackHandler: () -> Unit,
 ) {
     var angle by remember { mutableStateOf(0f) }
     var zoom by remember { mutableStateOf(1f) }
@@ -75,12 +73,10 @@ fun ZoomableImage(
     val screenWidth = configuration.screenWidthDp.dp.value
     val screenHeight = configuration.screenHeightDp.dp.value
 
-    BackHandler { onBackHandler() }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(IconColor)
+            .background(Color.Transparent)
             .combinedClickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = null,
