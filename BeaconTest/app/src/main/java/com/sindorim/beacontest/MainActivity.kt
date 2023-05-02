@@ -153,11 +153,9 @@ fun MyLocationTextView(
             }
         })
         Text(
-            text = "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[0])}, ${
-                roundToTwoDecimalPlace(
-                    mainViewModel.nowLocation.value[1]
-                )
-            }"
+            text = "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[0])}, " +
+                    "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[1])}, " +
+                    "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[2])}"
         )
     }
 }

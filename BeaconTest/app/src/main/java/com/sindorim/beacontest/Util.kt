@@ -1,5 +1,6 @@
 package com.sindorim.beacontest
 
+import android.util.Log
 import com.lemmingapex.trilateration.NonLinearLeastSquaresSolver
 import com.lemmingapex.trilateration.TrilaterationFunction
 import org.altbeacon.beacon.Beacon
@@ -9,6 +10,7 @@ import kotlin.math.abs
 import kotlin.math.pow
 import kotlin.math.round
 
+private const val TAG = "Util_SSAFY"
 fun roundToTwoDecimalPlace(number: Double): Double {
     return round(number * 100) / 100
 }
@@ -35,12 +37,14 @@ fun myDistance(txPower: Int, rssi: Double): Double {
 fun trilateration(beacons: List<Beacon>): DoubleArray {
     val positions = mutableListOf<DoubleArray>()
     val distances = mutableListOf<Double>()
+    Log.d(TAG, "trilateration: $beacons")
     for (i in beacons.indices) {
-        val tempCoord = coordList.asSequence()
+        val tempCoord = beaconPositionList.asSequence()
             .filter { coord ->
                 coord.id == beacons[i].id3.toInt()
             }.first()
-        positions.add(doubleArrayOf(tempCoord.x, tempCoord.y))
+
+        positions.add(doubleArrayOf(tempCoord.x, tempCoord.y, tempCoord.z))
         distances.add(beacons[i].distance)
     }
 

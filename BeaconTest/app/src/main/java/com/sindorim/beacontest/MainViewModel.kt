@@ -18,7 +18,7 @@ private const val TAG = "MainViewModel_SSAFY"
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
     var beaconList : MutableState<List<Beacon>> = mutableStateOf(emptyList())
-    var nowLocation = mutableStateOf(doubleArrayOf(0.0, 0.0))
+    var nowLocation = mutableStateOf(doubleArrayOf(0.0, 0.0, 0.0))
     val isScan = mutableStateOf(false)
 
     private val beaconManager = BeaconManager.getInstanceForApplication(application)
