@@ -58,7 +58,11 @@ fun trilateration(beacons: List<Beacon>): DoubleArray {
         ), LevenbergMarquardtOptimizer()
     )
 
-    val optimum: LeastSquaresOptimizer.Optimum = solver.solve()
 
-    return optimum.point.toArray()
+    return try {
+        solver.solve().point.toArray()
+    } catch (e: Exception) {
+        Log.e(TAG, "trilateration: $e", e)
+        doubleArrayOf(-9999.9, -9999.9, -9999.9)
+    }
 }

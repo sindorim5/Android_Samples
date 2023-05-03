@@ -89,6 +89,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             var sortedList = beacons.sortedBy { it.distance }
             var centroid = trilateration(sortedList).toList()
 
+            if (centroid == listOf(-9999.9, -9999.9, -9999.9)) {
+                return
+            }
+
             // Apply the Kalman filter to the centroid
             val measurementNoise =
                 listOf(1.0, 1.0, 1.0) // Adjust this value based on your measurement noise
