@@ -141,22 +141,47 @@ fun MyLocationTextView(
     modifier: Modifier = Modifier,
     mainViewModel: MainViewModel
 ) {
-    Column(modifier = modifier) {
-        Text(text = buildAnnotatedString {
-            withStyle(
-                style = SpanStyle(
-                    color = Color.Black.copy(0.8f),
-                    fontWeight = FontWeight.Bold
-                )
-            ) {
-                append("My Location")
-            }
-        })
-        Text(
-            text = "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[0])}, " +
-                    "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[1])}, " +
-                    "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[2])}"
-        )
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .padding(horizontal = 8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+        Column(modifier = modifier) {
+            Text(text = buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        color = Color.Black.copy(0.8f),
+                        fontWeight = FontWeight.Bold
+                    )
+                ) {
+                    append("My Location")
+                }
+            })
+            Text(
+                text = "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[0])}, " +
+                        "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[1])}, " +
+                        "${roundToTwoDecimalPlace(mainViewModel.nowLocation.value[2])}"
+            )
+        }
+        Column(modifier = modifier) {
+            Text(text = buildAnnotatedString {
+                withStyle(
+                    style = SpanStyle(
+                        color = Color.Black.copy(0.8f),
+                        fontWeight = FontWeight.Bold
+                    )
+                ) {
+                    append("Kalman Location")
+                }
+            })
+            Text(
+                text = "${roundToTwoDecimalPlace(mainViewModel.kalmanLocation.value[0])}, " +
+                        "${roundToTwoDecimalPlace(mainViewModel.kalmanLocation.value[1])}, " +
+                        "${roundToTwoDecimalPlace(mainViewModel.kalmanLocation.value[2])}"
+            )
+        }
     }
 }
 

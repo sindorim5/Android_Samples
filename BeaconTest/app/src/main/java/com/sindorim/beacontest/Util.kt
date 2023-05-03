@@ -38,16 +38,19 @@ fun trilateration(beacons: List<Beacon>): DoubleArray {
     val positions = mutableListOf<DoubleArray>()
     val distances = mutableListOf<Double>()
     Log.d(TAG, "trilateration: $beacons")
-    for (i in beacons.indices) {
-        val tempCoord = beaconPositionList.asSequence()
-            .filter { coord ->
-                coord.id == beacons[i].id3.toInt()
-            }.first()
+
+    val beaconPositionMap = beaconPositionList.associateBy { it.id }
+
+    beacons.forEach { beacon ->
+        // Use the map to get the corresponding Coordinate for the beacon ID
+        val tempCoord = beaconPositionMap[beacon.id3.toInt()] ?: run {
+            Log.d(TAG, "No matching beacon position found for ID: ${beacon.id3.toInt()}")
+            return@forEach
+        }
 
         positions.add(doubleArrayOf(tempCoord.x, tempCoord.y, tempCoord.z))
-        distances.add(beacons[i].distance)
+        distances.add(beacon.distance)
     }
-
     val solver = NonLinearLeastSquaresSolver(
         TrilaterationFunction(
             positions.toTypedArray(),
