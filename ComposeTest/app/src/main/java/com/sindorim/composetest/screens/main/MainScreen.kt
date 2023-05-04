@@ -103,6 +103,15 @@ fun MainScreen(
                 Text(text = "Gallery", color = Color.White)
             }
 
+            Button(
+                onClick = {
+                    navController.navigate(MyScreens.FlowExampleScreen.name)
+                },
+                modifier = Modifier.padding(bottom = 8.dp)
+            ) {
+                Text(text = "FlowExampleScreen", color = Color.White)
+            }
+
         } // End of Column
     } // End of Surface
 } // End of MainScreen

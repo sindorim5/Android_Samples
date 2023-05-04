@@ -16,6 +16,7 @@ import com.sindorim.composetest.ModalBottomSheetScreen3
 import com.sindorim.composetest.screens.autocomplete.AutoCompleteScreen
 import com.sindorim.composetest.screens.search.SearchScreen
 import com.sindorim.composetest.screens.bottomsheets.BottomSheetScreen
+import com.sindorim.composetest.screens.flowexample.FlowExampleScreen
 import com.sindorim.composetest.screens.gallery.GalleryScreen
 import com.sindorim.composetest.screens.stt.SpeechScreen
 
@@ -27,7 +28,7 @@ import com.sindorim.composetest.screens.stt.SpeechScreen
 @Composable
 fun MyNavigation() {
     val navController = rememberNavController()
-    
+
     NavHost(
         navController = navController,
         startDestination = MyScreens.MainScreen.name
@@ -69,6 +70,10 @@ fun MyNavigation() {
             GalleryScreen(navController = navController)
         }
 
+        composable(MyScreens.FlowExampleScreen.name) {
+            FlowExampleScreen(navController = navController)
+        }
+
     }
-    
+
 }

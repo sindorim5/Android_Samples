@@ -9,7 +9,8 @@ enum class MyScreens {
     SearchScreen,
     SpeechScreen,
     AutoCompleteScreen,
-    GalleryScreen;
+    GalleryScreen,
+    FlowExampleScreen;
 
     companion object  {
         fun fromRoute(route: String?): MyScreens
@@ -23,6 +24,7 @@ enum class MyScreens {
             SpeechScreen.name -> SpeechScreen
             AutoCompleteScreen.name -> AutoCompleteScreen
             GalleryScreen.name -> GalleryScreen
+            FlowExampleScreen.name -> FlowExampleScreen
             null -> MainScreen
             else -> throw IllegalArgumentException("Route $route is not recognized")
         }
