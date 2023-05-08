@@ -19,27 +19,27 @@ import javax.inject.Inject
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class OkHttpInterceptorClient
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class OkHttpInterceptorApi
+
+class OkHttpInterceptor @Inject constructor() : Interceptor {
+    @Throws(IOException::class)
+    override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
+        val newRequest = request().newBuilder()
+            .addHeader("Content-Type", "application/json")
+            .build()
+        proceed(newRequest)
+    }
+} // End of okHttpInterceptor class
+
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class OkHttpInterceptorClient
-
-    @Qualifier
-    @Retention(AnnotationRetention.BINARY)
-    annotation class OkHttpInterceptorApi
-
-    class OkHttpInterceptor @Inject constructor() : Interceptor {
-        @Throws(IOException::class)
-        override fun intercept(chain: Interceptor.Chain): Response = with(chain) {
-            val newRequest = request().newBuilder()
-                .addHeader("Content-Type", "application/json")
-                .build()
-            proceed(newRequest)
-        }
-    } // End of okHttpInterceptor class
 
     @Provides
     @OkHttpInterceptorClient
@@ -60,8 +60,6 @@ object AppModule {
             .build()
     } // End of provideInterceptorOkHttpClient
 
-    @Singleton
-    @OkHttpInterceptorApi
     @Provides
     fun provideSwApi(@OkHttpInterceptorClient interceptor: OkHttpClient): SwApi {
         return Retrofit.Builder()
