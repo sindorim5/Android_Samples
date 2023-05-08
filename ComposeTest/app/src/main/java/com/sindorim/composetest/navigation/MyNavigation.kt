@@ -5,6 +5,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -17,6 +18,8 @@ import com.sindorim.composetest.screens.autocomplete.AutoCompleteScreen
 import com.sindorim.composetest.screens.search.SearchScreen
 import com.sindorim.composetest.screens.bottomsheets.BottomSheetScreen
 import com.sindorim.composetest.screens.flowexample.FlowExampleScreen
+import com.sindorim.composetest.screens.flownetwork.FlowNetworkScreen
+import com.sindorim.composetest.screens.flownetwork.FlowNetworkViewModel
 import com.sindorim.composetest.screens.gallery.GalleryScreen
 import com.sindorim.composetest.screens.stt.SpeechScreen
 
@@ -72,6 +75,13 @@ fun MyNavigation() {
 
         composable(MyScreens.FlowExampleScreen.name) {
             FlowExampleScreen(navController = navController)
+        }
+
+        composable(MyScreens.FlowNetworkScreen.name) {
+            val flowNetworkViewModel = hiltViewModel<FlowNetworkViewModel>()
+            FlowNetworkScreen(
+                navController = navController, viewModel = flowNetworkViewModel
+            )
         }
 
     }

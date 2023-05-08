@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -62,7 +64,6 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_ui_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_ui_version"
 
-
     // Material Icons
     implementation "androidx.compose.material:material-icons-extended:$compose_ui_version"
 
@@ -88,4 +89,19 @@ dependencies {
     // Coil
     implementation "io.coil-kt:coil-compose:2.3.0"
 
+    //Dagger - Hilt
+    implementation "com.google.dagger:hilt-android:$hilt_version"
+    kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
+    implementation 'androidx.hilt:hilt-navigation-fragment:1.0.0'
+    implementation "androidx.hilt:hilt-navigation-compose:1.0.0"
+    kapt "androidx.hilt:hilt-compiler:1.0.0"
+
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    //GSON converter
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+
+    //OKHttp3
+    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.10.0'
 }

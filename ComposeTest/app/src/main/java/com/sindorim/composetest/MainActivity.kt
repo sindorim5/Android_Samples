@@ -31,7 +31,9 @@ import androidx.compose.ui.zIndex
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.sindorim.composetest.navigation.MyNavigation
 import com.sindorim.composetest.ui.theme.ComposeTestTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     @ExperimentalFoundationApi
