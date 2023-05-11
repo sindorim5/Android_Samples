@@ -32,7 +32,7 @@ class FlowNetworkViewModel @Inject constructor(
         swRepository.getAllPeople()
             .onStart {
                 _uiState.value = NetworkResult.Loading()
-                Log.d(TAG, "fetchData: ${uiState.value}")
+                Log.d(TAG, "onStart: ${uiState.value}")
             }
             .catch {response ->
                 response.printStackTrace()

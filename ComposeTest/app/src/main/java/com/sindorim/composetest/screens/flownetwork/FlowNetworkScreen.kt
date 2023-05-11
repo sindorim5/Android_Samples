@@ -30,18 +30,18 @@ fun FlowNetworkScreen(
     val uiState by viewModel.uiState.collectAsState()
     val peopleList by viewModel.peopleList.collectAsState()
 
-    val intState = remember { mutableStateOf(0) }
+    val intState = remember { mutableStateOf(100) }
 
     uiState.let {
         when (it) {
             is NetworkResult.Success -> {
-                intState.value == 200
+                intState.value = 200
             }
             is NetworkResult.Loading -> {
-                intState.value == 100
+                intState.value = 100
             }
             else ->{
-                intState.value == 400
+                intState.value = 400
             }
         }
     }
