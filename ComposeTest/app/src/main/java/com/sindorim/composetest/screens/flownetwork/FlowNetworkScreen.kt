@@ -9,11 +9,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,11 +27,24 @@ private const val TAG = "FlowNetworkScreen_SDR"
 fun FlowNetworkScreen(
     navController: NavController, viewModel: FlowNetworkViewModel
 ) {
-    val uiState by viewModel.uiState.collectAsState(
-        initial = NetworkResult.Loading()
-    )
+    val uiState by viewModel.uiState.collectAsState()
     val peopleList by viewModel.peopleList.collectAsState()
 
+    val intState = remember { mutableStateOf(0) }
+
+    uiState.let {
+        when (it) {
+            is NetworkResult.Success -> {
+                intState.value == 200
+            }
+            is NetworkResult.Loading -> {
+                intState.value == 100
+            }
+            else ->{
+                intState.value == 400
+            }
+        }
+    }
 
     Surface(
         modifier = Modifier
@@ -61,7 +70,7 @@ fun FlowNetworkScreen(
                     Text(text = "Log")
                 }
             }
-            if (uiState.data == null) {
+            if (intState.value == 100) {
                 Log.d(TAG, "if-else1: ${uiState.data}")
                 Box(
                     modifier = Modifier,
@@ -69,7 +78,7 @@ fun FlowNetworkScreen(
                 ) {
                     CircularProgressIndicator()
                 }
-            } else {
+            } else if (intState.value == 200) {
                 Log.d(TAG, "if-else2: $uiState")
                 LazyColumn() {
                     items(peopleList) { people ->
@@ -92,6 +101,8 @@ fun FlowNetworkScreen(
                         }
                     }
                 }
+            } else {
+                Text("ERROR")
             }
 
         }
