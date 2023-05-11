@@ -18,43 +18,25 @@ class SwRepository @Inject constructor(
     private val swApi: SwApi
 ) {
 
-    suspend fun getAllPeople(): Flow<NetworkResult<PeopleResponse>> {
+//    suspend fun getAllPeople(): Flow<NetworkResult<PeopleResponse>> {
+//        return flow {
+//            val response = swApi.getAllPeople()
+//            Log.d(TAG, "getAllPeople: ${response.body()}")
+//            when {
+//                response.isSuccessful -> emit(NetworkResult.Success(response.body()!!))
+//
+//                response.errorBody() != null -> emit(NetworkResult.Error(response.errorBody()!!.string()))
+//
+//                else -> emit(NetworkResult.Error(response.errorBody()!!.string()))
+//            }
+//        }
+//    } // End of getAllPeople
+
+    suspend fun getAllPeople(): Flow<Response<PeopleResponse>> {
         return flow {
             val response = swApi.getAllPeople()
-            Log.d(TAG, "getAllPeople: ${response.body()}")
-            when {
-                response.isSuccessful -> emit(NetworkResult.Success(response.body()!!))
-
-                response.errorBody() != null -> emit(NetworkResult.Error(response.errorBody()!!.string()))
-
-                else -> emit(NetworkResult.Error(response.errorBody()!!.string()))
-            }
+            emit(response)
         }
     } // End of getAllPeople
 
 } // End of SwRepository
-
-//private val _testCallStateFlow = MutableStateFlow<NetworkResult<Int>>(NetworkResult.Loading())
-//val testCallStateFlow: StateFlow<NetworkResult<Int>> = _testCallStateFlow.asStateFlow()
-//
-//suspend fun testCall() {
-//    val response = testApi.testCall()
-//
-//    _testCallStateFlow.value = NetworkResult.Loading()
-//    when {
-//        response.isSuccessful -> {
-//            _testCallStateFlow.value = NetworkResult.Success(
-//                response.code()
-//            )
-//        }
-//        response.errorBody() != null -> {
-//            _testCallStateFlow.value = NetworkResult.Error(
-//                response.errorBody()!!.string()
-//            )
-//        }
-//    }
-//} // End of testCall
-//
-//suspend fun testCall2(): Flow<Response<Void>> = flow {
-//    emit(testApi.testCall2())
-//}.flowOn(Dispatchers.IO)  // End of testCall2

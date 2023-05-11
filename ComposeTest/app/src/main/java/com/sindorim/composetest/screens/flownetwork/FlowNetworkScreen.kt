@@ -1,14 +1,10 @@
 package com.sindorim.composetest.screens.flownetwork
 
 import android.util.Log
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Surface
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -22,12 +18,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.sindorim.composetest.data.NetworkResult
+import com.sindorim.composetest.data.dto.PeopleResponse
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
 
 private const val TAG = "FlowNetworkScreen_SDR"
+
 @Composable
 fun FlowNetworkScreen(
     navController: NavController, viewModel: FlowNetworkViewModel
 ) {
+    val uiState by viewModel.uiState.collectAsState(
+        initial = NetworkResult.Loading()
+    )
+    val peopleList by viewModel.peopleList.collectAsState()
 
 
     Surface(
@@ -35,38 +42,58 @@ fun FlowNetworkScreen(
             .fillMaxWidth()
             .fillMaxHeight()
     ) {
-        val peopleList by viewModel.peopleList.collectAsState()
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .fillMaxHeight()
+                .fillMaxHeight(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Button(onClick = {
-                Log.d(TAG, "uiState: ${viewModel.uiState.value.data}")
-                Log.d(TAG, "peopleList: ${viewModel.peopleList.value}")
-            }) {
-                Text(text = "Log")
+            Box(
+                modifier = Modifier,
+                contentAlignment = Alignment.TopCenter
+            ) {
+                Button(onClick = {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        viewModel.fetchData()
+                    }
+                }) {
+                    Text(text = "Log")
+                }
             }
-            LazyColumn() {
-                items(peopleList) { people ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(80.dp)
-                            .padding(8.dp)
-                    ) {
-                        Column(
-                            modifier = Modifier.fillMaxWidth().padding(4.dp),
-                            verticalArrangement = Arrangement.SpaceEvenly,
-                            horizontalAlignment = Alignment.CenterHorizontally
+            if (uiState.data == null) {
+                Log.d(TAG, "if-else1: ${uiState.data}")
+                Box(
+                    modifier = Modifier,
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                Log.d(TAG, "if-else2: $uiState")
+                LazyColumn() {
+                    items(peopleList) { people ->
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(80.dp)
+                                .padding(8.dp)
                         ) {
-                            Text(text = people.name)
-                            Text(text = people.gender)
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(4.dp),
+                                verticalArrangement = Arrangement.SpaceEvenly,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(text = people.name)
+                                Text(text = people.gender)
+                            }
                         }
                     }
                 }
             }
+
         }
     }
 

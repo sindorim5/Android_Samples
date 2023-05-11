@@ -9,12 +9,8 @@ import com.sindorim.composetest.data.dto.PeopleResponse
 import com.sindorim.composetest.di.AppModule
 import com.sindorim.composetest.domain.repository.SwRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -27,12 +23,44 @@ class FlowNetworkViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            swRepository.getAllPeople().collect { response ->
-                Log.d(TAG, "init: ${response.data}")
-                _uiState.value = response
-            }
+            fetchData()
         }
     }
+
+    suspend fun fetchData() {
+        Log.d(TAG, "fetchData: fetchGO")
+        swRepository.getAllPeople()
+            .onStart {
+                _uiState.value = NetworkResult.Loading()
+                Log.d(TAG, "fetchData: ${uiState.value}")
+            }
+            .catch {response ->
+                response.printStackTrace()
+            }
+            .flowOn(Dispatchers.IO)
+            .collect { response ->
+                Log.d(TAG, "fetchDataREP: $response")
+//                    if (response.data != null) {
+//                        Log.d(TAG, "init: ${response.data}")
+//                        _uiState.value = response
+//                    } else {
+//                        Log.d(TAG, "error: ${response.message}")
+//                    }
+                when {
+                    response.isSuccessful -> {
+                        _uiState.value = NetworkResult.Success(response.body()!!)
+                    }
+                    response.errorBody() != null -> NetworkResult.Error(
+                        response.errorBody()!!.string(),
+                        null
+                    )
+                    else -> NetworkResult.Error(
+                        response.errorBody()!!.string(),
+                        null
+                    )
+                }
+            }
+    } // End of fetchData
 
     private val _uiState = MutableStateFlow<NetworkResult<PeopleResponse>>(NetworkResult.Loading())
     val uiState: StateFlow<NetworkResult<PeopleResponse>> = _uiState
@@ -41,7 +69,7 @@ class FlowNetworkViewModel @Inject constructor(
         it.data?.peopleList ?: emptyList()
     }.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Eagerly,
+        started = SharingStarted.WhileSubscribed(),
         initialValue = emptyList()
     )
 
