@@ -29,6 +29,7 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.sindorim.beacontest.ui.theme.BeaconTestTheme
 import org.altbeacon.beacon.Beacon
 
+private const val TAG = "MainActivity_sdr"
 class MainActivity : ComponentActivity() {
     private val mainViewModel by viewModels<MainViewModel>()
 
@@ -64,8 +65,12 @@ fun Home(mainViewModel: MainViewModel) {
                 Manifest.permission.BLUETOOTH,
                 Manifest.permission.BLUETOOTH_ADMIN,
             )
+        },
+        onPermissionsResult = {
+            Log.d(TAG, "inPermission: Go")
+            mainViewModel.scanToggle()
         }
-    ) // End of btPermissionsState
+    )// End of btPermissionsState
 
     Scaffold(
         topBar = {
@@ -83,6 +88,7 @@ fun Home(mainViewModel: MainViewModel) {
                     if (btPermissionsState.allPermissionsGranted) {
                         mainViewModel.scanToggle()
                     } else {
+                        Log.d("SDR", "Home: permission?")
                         btPermissionsState.launchMultiplePermissionRequest()
                     }
                 },

@@ -35,7 +35,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         if (!isScan.value) {
             isScan.value = true
             beaconManager.apply {
-                beaconParsers.add(BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
+                    beaconParsers.add(BeaconParser().setBeaconLayout("m:2-3=0215,i:4-19,i:20-21,i:22-23,p:24-24"))
                 addMonitorNotifier(monitorNotifier)
                 addRangeNotifier(rangeNotifier)
                 startMonitoring(region)

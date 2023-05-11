@@ -47,7 +47,6 @@ fun trilateration(beacons: List<Beacon>): DoubleArray {
             Log.d(TAG, "No matching beacon position found for ID: ${beacon.id3.toInt()}")
             return@forEach
         }
-
         positions.add(doubleArrayOf(tempCoord.x, tempCoord.y, tempCoord.z))
         distances.add(beacon.distance)
     }
