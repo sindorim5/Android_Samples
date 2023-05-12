@@ -1,20 +1,11 @@
 package com.sindorim.kotlinflowexample
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.count
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapConcat
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.fold
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.reduce
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class MainViewModel : ViewModel() {
@@ -32,8 +23,49 @@ class MainViewModel : ViewModel() {
         }
     }
 
+    private val _stateFlow = MutableStateFlow(0)
+    val stateFlow = _stateFlow.asStateFlow()
+
+    private val _sharedFlow = MutableSharedFlow<Int>(3)
+    val sharedFlow = _sharedFlow.asSharedFlow()
+
+    val mutableState = mutableStateOf("this")
+
+    fun squareNumber(number: Int) {
+        viewModelScope.launch {
+            _sharedFlow.emit(number * number)
+        }
+    }
+
+    fun incrementCounter() {
+        _stateFlow.value += 1
+    }
+
+    fun thisAndThat() {
+        if (mutableState.value == "this") mutableState.value = "that"
+        else mutableState.value = "this"
+    }
+
     init {
-        collectFlows()
+//        collectFlows()
+        for (i in 1 until 8) {
+            squareNumber(i)
+        }
+
+        println("sdr FLOW")
+        viewModelScope.launch {
+            sharedFlow.collect { value ->
+                delay(2000L)
+                println("sdr FLOW 2: shared flow num is $value")
+            }
+        }
+        viewModelScope.launch {
+            sharedFlow.collect { value ->
+                delay(3000L)
+                println("sdr FLOW 3: shared flow num is $value")
+            }
+        }
+//        squareNumber(3) // collector를 설치하고 함수를 실행시켜야 값을 출력함
     }
 
     // Do not do like this in UI Layer
@@ -46,7 +78,7 @@ class MainViewModel : ViewModel() {
 
         viewModelScope.launch {
             val count = countDownFlow
-                .filter {  time ->
+                .filter { time ->
                     time % 2 == 0
                 }
                 .map { time ->
@@ -102,9 +134,10 @@ class MainViewModel : ViewModel() {
             }
                 .conflate()
                 .collect { value ->
-                println("sdr The value is $value")
-            }
+                    println("sdr The value is $value")
+                }
         }
     }
+
 
 }
