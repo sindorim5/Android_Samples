@@ -31,8 +31,6 @@ fun MainScreen(
 
     DisposableEffect(key1 = lifecycleOwner.lifecycle) {
 
-        Log.d(TAG, "MainScreen1: ${lifecycleOwner.lifecycle.currentState}")
-
         val observer = LifecycleEventObserver { source, event ->
             Log.d(TAG, "MainScreen observe: $event")
         }
