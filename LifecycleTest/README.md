@@ -21,24 +21,24 @@ DisposableEffect(key1 = lifecycleOwner.lifecycle) {
     }
 }
 ```
-**MainActivity** | onCreate -> onStart -> onResume
-*(To Compose Activity Button Click)*
-**MainActivity** | -> onPause
-**ComposeActivity** | onCreate -> onStart -> onResume
-**MainScreen** | onCreate -> onStart -> onResume
-**MainActivity** | onStop 
-*(To Second Screen Button Click)*
-**MainScreen** | onPause -> onStop
-**SecondScreen** | onCreate -> onStart
-**MainScreen** | onDispose
-**SecondScreen** | onResume
-*(To Second Activity Button Click)*
-**SecondScreen** | onPause
-**ComposeActivity** | onPause
-**SecondActivity** | onCreate -> onStart -> onResume
-**SecondScreen** | onStop
-**ComposeActivity** | onStop
-*(To Main Activity Button Click)*
-**SecondActivity** | onPause
-**MainActivity** | onCreate -> onStart -> onResume 
+**MainActivity** | onCreate -> onStart -> onResume <br>
+*(To Compose Activity Button Click)* <br>
+**MainActivity** | -> onPause <br>
+**ComposeActivity** | onCreate -> onStart -> onResume <br>
+**MainScreen** | onCreate -> onStart -> onResume <br>
+**MainActivity** | onStop <br>
+*(To Second Screen Button Click)* <br>
+**MainScreen** | onPause -> onStop <br>
+**SecondScreen** | onCreate -> onStart <br>
+**MainScreen** | onDispose <br>
+**SecondScreen** | onResume <br>
+*(To Second Activity Button Click)* <br>
+**SecondScreen** | onPause <br>
+**ComposeActivity** | onPause <br>
+**SecondActivity** | onCreate -> onStart -> onResume <br>
+**SecondScreen** | onStop <br>
+**ComposeActivity** | onStop <br>
+*(To Main Activity Button Click)* <br>
+**SecondActivity** | onPause <br>
+**MainActivity** | onCreate -> onStart -> onResume <br>
 **SecondActivity** | onStop
