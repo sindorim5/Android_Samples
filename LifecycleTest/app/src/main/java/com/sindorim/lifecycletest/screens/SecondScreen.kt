@@ -56,6 +56,7 @@ fun SecondScreen(
                 text = "Second Screen",
             )
             Button(onClick = {
+                Log.d(TAG, "SecondScreen: Button Click")
                 val intent = Intent(context, SecondActivity::class.java)
                 context.startActivity(intent)
             }) {

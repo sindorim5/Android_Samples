@@ -56,6 +56,7 @@ fun MainScreen(
                 text = "Main Screen",
             )
             Button(onClick = {
+                Log.d(TAG, "MainScreen: Button Click")
                 navController.navigate(Screens.Second.route)
             }) {
                 Text(
