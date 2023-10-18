@@ -1,5 +1,7 @@
 # Paging 3 Tutorial
 
+![paging3.png](./paging3.png)
+
 ### Paginate the Data from DataSource
 - PagingSource<Int, UnsplashImage>()
     - KEY : Identifier used to load the data. Usually a Page Number.
@@ -25,5 +27,5 @@
 ----
 
 - 참고자료
-  - [Paging 3 Stevdza-San Youtube] (https://www.youtube.com/playlist?list=PLSrm9z4zp4mGxiCHqcJybVL7GoSJ6lTTY)
-  - [Paging 라이브러리 개요] (https://developer.android.com/topic/libraries/architecture/paging/v3-overview?hl=ko)
+  - [Paging 3 Stevdza-San Youtube](https://www.youtube.com/playlist?list=PLSrm9z4zp4mGxiCHqcJybVL7GoSJ6lTTY)
+  - [Paging 라이브러리 개요](https://developer.android.com/topic/libraries/architecture/paging/v3-overview?hl=ko)
